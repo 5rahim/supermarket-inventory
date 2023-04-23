@@ -34,7 +34,9 @@ export function extractBasicFieldProps<Props extends BasicFieldOptions>(props: P
          fieldClassName,
          labelProps,
       },
-   ] as [Omit<Props, "name" | "help" | "error" | "isDisabled" | "isReadOnly" | "fieldDetailsClassName" | "fieldLabelClassName" | "fieldClassName" | "id" | "labelProps">, Omit<BasicFieldOptions, "id"> & { id: string }]
+   ] as [Omit<Props, "name" | "help" | "error" | "isDisabled" | "isReadOnly" | "fieldDetailsClassName" | "fieldLabelClassName" | "fieldClassName" | "id" | "labelProps">, Omit<BasicFieldOptions, "id"> & {
+      id: string
+   }]
 }
 
 export interface BasicFieldOptions {
@@ -105,9 +107,9 @@ export const BasicField = React.memo(React.forwardRef<HTMLDivElement, BasicField
                   </ShowOnly>
                </label>
             </ShowOnly>
-      
+            
             {children}
-      
+            
             <ShowOnly when={!!help || !!error}>
                <div className={cn("", fieldDetailsClassName)}>
                   {!!help && <p className="text-sm text-gray-500">{help}</p>}

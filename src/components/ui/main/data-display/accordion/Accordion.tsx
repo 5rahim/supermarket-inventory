@@ -77,7 +77,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ children, className, titl
                />
             </svg>
          </summary>
-   
+         
          {textContent && <div className="px-4 mt-4 leading-relaxed text-gray-700">
             {textContent}
          </div>}

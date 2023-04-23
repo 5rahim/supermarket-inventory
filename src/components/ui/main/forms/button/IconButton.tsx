@@ -20,7 +20,8 @@ const elementStyles = cva(null, {
 })
 
 
-export interface IconButtonProps extends Omit<ButtonProps, "leftIcon" | "rightIcon" | "iconSpacing" | "isUppercase">, VariantProps<typeof elementStyles> {
+export interface IconButtonProps extends Omit<ButtonProps, "leftIcon" | "rightIcon" | "iconSpacing" | "isUppercase">,
+   VariantProps<typeof elementStyles> {
    icon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>
 }
 

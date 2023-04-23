@@ -17,19 +17,19 @@ const buttonStyles = cva(`py-2 px-4 shadow-sm whitespace-nowrap`, {
          'warning-subtle': 'text-orange-600 border border-orange-500 bg-orange-50 border-transparent hover:bg-orange-100 active:bg-orange-50',
          'warning-link': 'shadow-none text-orange-500 border border-transparent bg-transparent hover:underline active:text-orange-700',
          'warning-basic': 'shadow-none text-orange-500 border border-transparent bg-transparent hover:text-orange-600 active:text-orange-700',
-   
+         
          'success': 'bg-green-500 hover:bg-green-600 active:bg-green-700 border border-transparent',
          'success-outline': 'text-green-500 border border-green-200 bg-transparent hover:bg-green-500 active:bg-green-600 hover:text-white',
          'success-subtle': 'text-green-600 border border-green-500 bg-green-50 border-transparent hover:bg-green-100 active:bg-green-50',
          'success-link': 'shadow-none text-green-500 border border-transparent bg-transparent hover:underline active:text-green-700',
          'success-basic': 'shadow-none text-green-500 border border-transparent bg-transparent hover:text-green-600 active:text-green-700',
-   
+         
          'alert': 'bg-red-500 hover:bg-red-600 active:bg-red-700 border border-transparent',
          'alert-outline': 'text-red-500 border border-red-200 bg-transparent hover:bg-red-500 active:bg-red-600 hover:text-white',
          'alert-subtle': 'text-red-600 border border-red-500 bg-red-50 border-transparent hover:bg-red-100 active:bg-red-50',
          'alert-link': 'shadow-none text-red-500 border border-transparent bg-transparent hover:underline active:text-red-700',
          'alert-basic': 'shadow-none text-red-500 border border-transparent bg-transparent hover:text-red-600 active:text-red-700',
-   
+         
          'gray': 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700 border border-transparent',
          'gray-outline': 'text-gray-600 border border-gray-200 bg-transparent hover:bg-gray-100 active:bg-gray-200',
          'gray-subtle': 'text-gray-600 border border-gray-500 bg-gray-50 border-transparent hover:bg-gray-100 active:bg-gray-50',

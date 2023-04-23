@@ -121,11 +121,11 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>((pro
             {...basicFieldProps}
          >
             <div className={cn(inputContainerStyle())}>
-      
+               
                {inputLeftIcon(leftIcon)}
-   
+               
                {inputLeftAddon(leftAddon, leftIcon)}
-      
+               
                <input
                   // type="text"
                   id={basicFieldProps.id}

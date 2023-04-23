@@ -29,7 +29,7 @@ export const Divide = React.forwardRef<HTMLDivElement, DividerProps>((props, ref
                `relative w-full`,
                {
                   'divide-y': !vertically,
-                  'flex divide-x': !!vertically
+                  'flex divide-x': !!vertically,
                },
                elementStyles({}),
                className,

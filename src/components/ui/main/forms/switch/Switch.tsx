@@ -98,14 +98,14 @@ export const Switch = React.forwardRef<HTMLDivElement, SwitchProps>((props, ref)
          >
             <label className={cn("relative inline-flex gap-2 items-center flex-none", rootLabelClassName)} {...api.rootProps}>
                <input type="checkbox" {...api.inputProps} />
-         
+               
                <div
                   className={cn(
                      "relative h-8 w-14 relative overflow-hidden cursor-pointer flex-none",
                      controlWrapperStyles({ size }),
                   )}
                >
-               
+                  
                   <span
                      className={cn(
                         "absolute inset-0 rounded-full bg-gray-300 transition",

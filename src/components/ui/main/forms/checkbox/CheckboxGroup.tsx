@@ -9,10 +9,9 @@ import React, { createContext, useCallback, useContext, useEffect, useId, useSta
 
 interface CheckboxGroupContextValue {
    group_selectedValues: string[]
+   group_size: CheckboxProps['size']
    
    group_handleValueChange(value: string, isChecked: boolean | "indeterminate"): void
-   
-   group_size: CheckboxProps['size']
 }
 
 const CheckboxGroupContext = createContext<CheckboxGroupContextValue | null>(null)

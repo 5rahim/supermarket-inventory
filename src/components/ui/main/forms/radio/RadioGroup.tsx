@@ -8,7 +8,6 @@ import * as radio from "@zag-js/radio-group"
 import { normalizeProps, useMachine } from '@zag-js/react'
 import { cva, VariantProps } from 'class-variance-authority'
 import React, { useEffect, useId } from 'react'
-import { get } from 'react-hook-form'
 
 
 const controlStyles = cva(null, {
@@ -101,7 +100,7 @@ export const RadioGroup = React.forwardRef<HTMLInputElement, RadioGroupProps>((p
                         radioWrapperClassName,
                      )}
                   >
-   
+                     
                      <div
                         className={cn(
                            "inline-flex flex-none justify-center items-center border border-gray-300 rounded-full text-white bg-white cursor-pointer transition duration-10 relative",
@@ -118,7 +117,7 @@ export const RadioGroup = React.forwardRef<HTMLInputElement, RadioGroupProps>((p
                         {...api.getRadioControlProps({ value: opt.value })}>
                         {checkedIcon ? checkedIcon : <GoPrimitiveDot />}
                      </div>
-   
+                     
                      <div
                         className={cn(
                            "font-normal",
@@ -129,7 +128,7 @@ export const RadioGroup = React.forwardRef<HTMLInputElement, RadioGroupProps>((p
                      >
                         {opt.label ?? opt.value}
                      </div>
-   
+                     
                      {!!opt.help && <div
                          className={cn(
                             "text-gray-500 data-disabled:text-gray-300",
@@ -139,9 +138,9 @@ export const RadioGroup = React.forwardRef<HTMLInputElement, RadioGroupProps>((p
                      >
                         {opt.help}
                      </div>}
-   
+                     
                      <input {...api.getRadioInputProps({ value: opt.value })} ref={ref} />
-
+                  
                   </label>
                
                ))}

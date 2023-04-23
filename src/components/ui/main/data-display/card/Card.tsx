@@ -47,7 +47,7 @@ const _Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
 export interface CardBodyProps extends React.ComponentPropsWithRef<'div'> {
 }
 
-const CardBody: React.FC<CardBodyProps> = ({ children, className , ...rest}) => {
+const CardBody: React.FC<CardBodyProps> = ({ children, className, ...rest }) => {
    return (
       <Stack className={cn("p-4 text-gray-800 gap-2", className)} {...rest}>{children}</Stack>
    )
@@ -56,7 +56,7 @@ const CardBody: React.FC<CardBodyProps> = ({ children, className , ...rest}) => 
 export interface CardActionProps extends React.ComponentPropsWithRef<'div'> {
 }
 
-const CardAction: React.FC<CardActionProps> = ({ children, className , ...rest}) => {
+const CardAction: React.FC<CardActionProps> = ({ children, className, ...rest }) => {
    return (
       <Stack className={cn("flex w-full mt-2", className)} {...rest}>{children}</Stack>
    )
@@ -65,7 +65,7 @@ const CardAction: React.FC<CardActionProps> = ({ children, className , ...rest})
 export interface CardTitleProps extends React.ComponentPropsWithRef<'h2'> {
 }
 
-const CardTitle: React.FC<CardTitleProps> = ({ children, className , ...rest}) => {
+const CardTitle: React.FC<CardTitleProps> = ({ children, className, ...rest }) => {
    return (
       <h2 className={cn("flex items-center gap-2 font-bold text-xl md:text-2xl", className)} {...rest}>{children}</h2>
    )
@@ -76,7 +76,7 @@ export interface CardIconProps extends React.ComponentPropsWithRef<'div'> {
    icon: React.ReactElement<any, string | React.JSXElementConstructor<any>>
 }
 
-const CardIcon: React.FC<CardIconProps> = ({ children, icon, className , ...rest}) => {
+const CardIcon: React.FC<CardIconProps> = ({ children, icon, className, ...rest }) => {
    return (
       <IconDisplay className={cn("mx-auto md:mx-0", className)} icon={icon} {...rest} />
    )

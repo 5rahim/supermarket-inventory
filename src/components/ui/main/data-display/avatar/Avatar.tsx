@@ -13,10 +13,10 @@ const elementStyles = cva(null, {
          lg: 'w-16 h-16',
          xl: 'w-24 h-24',
          '2xl': 'w-32 h-32',
-      }
+      },
    },
    defaultVariants: {
-      size: 'md'
+      size: 'md',
    },
 })
 

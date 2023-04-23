@@ -36,11 +36,11 @@ const elementStyles = cva('border', {
          sm: 'w-8 h-8 text-lg',
          md: 'w-10 h-10 text-2xl',
          lg: 'w-14 h-14 text-3xl',
-      }
+      },
    },
    defaultVariants: {
       intent: 'primary',
-      size: 'md'
+      size: 'md',
    },
 })
 
@@ -68,7 +68,7 @@ export const IconDisplay = React.forwardRef<HTMLDivElement, IconDisplayProps>((p
             className={cn(
                `inline-flex rounded-md items-center justify-center`,
                {
-                 'rounded-full': rounded
+                  'rounded-full': rounded,
                },
                elementStyles({ intent, size }),
                className,

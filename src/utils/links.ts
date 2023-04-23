@@ -29,7 +29,10 @@ export const siteLinkTo = (callback: (links: SiteLinks) => SiteRoute, lng: strin
    return returnLink
 }
 
-export const appLinkTo = (callback: (links: SiteLinks) => SiteRoute, lng: string, ...parameters: { key: string, value: string }[]) => (subdomain: string | undefined) => {
+export const appLinkTo = (callback: (links: SiteLinks) => SiteRoute, lng: string, ...parameters: {
+   key: string,
+   value: string
+}[]) => (subdomain: string | undefined) => {
    let returnLink = `/${lng}` + callback(siteLinks).href
    const isSubdomainRoute = !!subdomain || (callback(siteLinks).subdomain ?? false)
    

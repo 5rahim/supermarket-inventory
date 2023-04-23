@@ -116,9 +116,9 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
                      {Icon && <Icon />}
                   </div>
                   <div className="self-center ml-3">
-                        <span className="font-bold">
-                            {title}
-                        </span>
+                     <span className="font-bold">
+                        {title}
+                     </span>
                      {!!description && <div>
                          <div className="mt-.5">
                             {description}

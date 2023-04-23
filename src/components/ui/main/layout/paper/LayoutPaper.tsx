@@ -30,7 +30,7 @@ export const LayoutPaper = React.forwardRef<HTMLDivElement, LayoutPaperProps>((p
                `transition ease-in`,
                "shadow-sm",
                {
-                  "after:content-['*'] after:absolute after:bg-gradient-to-r after:from-indigo-100 after:to-yellow-100 after:inset-14 after:filter after:blur-2xl after:w-full after:h-full after:top-0 after:left-0 after:z-[-1]": hasGradient
+                  "after:content-['*'] after:absolute after:bg-gradient-to-r after:from-indigo-100 after:to-yellow-100 after:inset-14 after:filter after:blur-2xl after:w-full after:h-full after:top-0 after:left-0 after:z-[-1]": hasGradient,
                },
                elementStyles({}),
                className,

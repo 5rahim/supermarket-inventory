@@ -28,7 +28,7 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>((props, ref) =
             className={cn(
                `inline-flex flex-col gap-2`,
                {
-                 'flex-row': horizontal
+                  'flex-row': horizontal,
                },
                elementStyles({}),
                className,
