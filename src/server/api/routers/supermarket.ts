@@ -17,7 +17,7 @@ export const supermarketRouter = createTRPCRouter({
          return supermarkets?.[0] ?? null
          
       }),
-   getBySlut: protectedProcedure
+   getBySlug: protectedProcedure
       .input(z.object({ slug: z.string().nullish() }))
       .query(async ({ ctx, input }) => {
          if (!input.slug)
