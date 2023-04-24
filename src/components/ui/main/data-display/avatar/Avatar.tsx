@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/tailwind/tailwind-utils'
 import { cva, VariantProps } from 'class-variance-authority'
 import React, { useRef } from 'react'

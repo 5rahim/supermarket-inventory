@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/tailwind/tailwind-utils'
 import { GoPrimitiveDot } from '@react-icons/all-files/go/GoPrimitiveDot'
 import { BasicField, BasicFieldOptions, extractBasicFieldProps } from '@ui/main/forms/basic-field/BasicField'

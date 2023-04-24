@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/tailwind/tailwind-utils'
 import { BasicField, BasicFieldOptions, extractBasicFieldProps } from '@ui/main/forms/basic-field/BasicField'
 import { Checkbox, CheckboxProps } from '@ui/main/forms/checkbox/Checkbox'

@@ -1,7 +1,5 @@
-'use client'
-
-import RawLink from '@/components/ui/shared/links/RawLink'
 import { Button, ButtonProps } from '@ui/main/forms/button/Button'
+import Link from 'next/link'
 import React from 'react'
 
 interface LinkButtonProps {
@@ -15,9 +13,9 @@ const LinkButton: React.FC<LinkButtonProps & ButtonProps> = (props) => {
    
    return (
       <>
-         <RawLink href={to} className="[display:contents;]">
+         <Link href={to} className="[display:contents;]">
             <Button {...rest} />
-         </RawLink>
+         </Link>
       </>
    )
    

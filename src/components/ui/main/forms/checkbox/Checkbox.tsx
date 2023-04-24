@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/tailwind/tailwind-utils'
 import { ImCheckmark } from '@react-icons/all-files/im/ImCheckmark'
 import { BasicField, BasicFieldOptions, extractBasicFieldProps } from '@ui/main/forms/basic-field/BasicField'

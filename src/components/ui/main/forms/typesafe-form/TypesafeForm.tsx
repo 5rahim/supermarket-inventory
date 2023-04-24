@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/tailwind/tailwind-utils'
 import { MaybeRenderProp } from '@/types'
 import { runIfFn } from '@/utils/components'

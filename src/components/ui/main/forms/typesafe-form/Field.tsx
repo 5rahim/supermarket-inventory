@@ -1,5 +1,3 @@
-'use client'
-
 import { callAllHandlers } from '@/utils/components'
 import { createPolymorphicComponent } from '@/utils/polymorphic-component'
 import { BasicFieldOptions } from '@ui/main/forms/basic-field/BasicField'
