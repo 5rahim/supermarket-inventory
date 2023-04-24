@@ -55,7 +55,7 @@ const AuthShowcase: React.FC = () => {
                {sessionData ? "Sign out" : "Sign in"}
             </Button>
             <ShowOnly when={!!sessionData}>
-               <LinkButton to="/supermarket/new">
+               <LinkButton to="/supermarket">
                   Dashboard
                </LinkButton>
             </ShowOnly>

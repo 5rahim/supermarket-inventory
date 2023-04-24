@@ -24,8 +24,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
    }
    
    const navigation = [
-      { name: 'My supermarket', href: '#', current: true },
-      { name: 'Inventory', href: '#', current: false },
+      { name: 'My supermarket', href: '/supermarket', current: false },
+      { name: 'Inventory', href: '/supermarket/inventory', current: false },
    ]
    const userNavigation = [
       { name: 'Sign out', href: '/api/auth/signout' },
