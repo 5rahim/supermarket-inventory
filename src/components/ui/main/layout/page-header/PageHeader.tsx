@@ -6,7 +6,7 @@ const headingStyles = cva("font-bold text-gray-900", {
    variants: {
       size: {
          lg: "text-2xl sm:text-3xl",
-         xl: "text-2xl sm:text-4xl",
+         xl: "text-2xl sm:text-3xl",
       },
    },
    defaultVariants: {
@@ -40,7 +40,7 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>((pro
          <header aria-label={title}>
             <div
                className={cn(
-                  "mx-auto max-w-screen-xl py-2 sm:py-4",
+                  "mx-auto max-w-screen-xl",
                   className,
                )}
             >

@@ -4,18 +4,21 @@ import { BiMenu } from '@react-icons/all-files/bi/BiMenu'
 import { BiX } from '@react-icons/all-files/bi/BiX'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { Fragment } from 'react'
 
 
 interface LayoutProps {
    children?: React.ReactNode
+   header?: React.ReactNode
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
    
-   const { children, ...rest } = props
+   const { children, header, ...rest } = props
    
    const { data: session } = useSession()
+   const router = useRouter()
    
    const user = {
       name: session?.user?.name,
@@ -24,11 +27,11 @@ export const Layout: React.FC<LayoutProps> = (props) => {
    }
    
    const navigation = [
-      { name: 'My supermarket', href: '/supermarket', current: false },
-      { name: 'Inventory', href: '/supermarket/inventory', current: false },
-      { name: 'Categories', href: '/supermarket/categories', current: false },
-      { name: 'Suppliers', href: '/supermarket/suppliers', current: false },
-      { name: 'Supplier orders', href: '/supermarket/supplier-orders', current: false },
+      { name: 'My supermarket', href: '/supermarket', current: router.pathname === '/supermarket' },
+      { name: 'Inventory', href: '/supermarket/inventory', current: router.pathname === '/supermarket/inventory' },
+      { name: 'Categories', href: '/supermarket/categories', current: router.pathname === '/supermarket/categories' },
+      { name: 'Suppliers', href: '/supermarket/suppliers', current: router.pathname === '/supermarket/suppliers' },
+      { name: 'Supplier orders', href: '/supermarket/supplier-orders', current: router.pathname === '/supermarket/supplier-orders' },
    ]
    const userNavigation = [
       { name: 'Sign out', href: '/api/auth/signout' },
@@ -51,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                               <div className="hidden md:block">
                                  <div className="ml-10 flex items-baseline space-x-4">
                                     {navigation.map((item) => (
-                                       <a
+                                       <Link
                                           key={item.name}
                                           href={item.href}
                                           className={cn(
@@ -63,7 +66,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                           aria-current={item.current ? 'page' : undefined}
                                        >
                                           {item.name}
-                                       </a>
+                                       </Link>
                                     ))}
                                  </div>
                               </div>
@@ -92,7 +95,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                           {userNavigation.map((item) => (
                                              <Menu.Item key={item.name}>
                                                 {({ active }) => (
-                                                   <a
+                                                   <Link
                                                       href={item.href}
                                                       className={cn(
                                                          active ? 'bg-gray-100' : '',
@@ -100,7 +103,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                                       )}
                                                    >
                                                       {item.name}
-                                                   </a>
+                                                   </Link>
                                                 )}
                                              </Menu.Item>
                                           ))}
@@ -170,9 +173,10 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                )}
             </Disclosure>
             
-            <header className="bg-white shadow">
+            <header className="bg-white shadow-sm">
                <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-                  <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">Dashboard</h1>
+                  {header && header}
+                  {/*<h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">Dashboard</h1>*/}
                </div>
             </header>
             <main>

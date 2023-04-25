@@ -1,5 +1,4 @@
 import { ProtectedPage } from '@/components/auth/ProtectedPage'
-import DebugData from '@/components/DebugData'
 import { Layout } from '@/components/layout/Layout'
 import { useDisclosure } from '@/hooks/use-disclosure'
 import { usePriceFormatter } from '@/hooks/use-price-formatter'
@@ -12,6 +11,7 @@ import { Button } from '@ui/main/forms/button/Button'
 import { createTypesafeFormSchema } from '@ui/main/forms/typesafe-form/CreateTypesafeFormSchema'
 import { Field } from '@ui/main/forms/typesafe-form/Field'
 import { TypesafeForm } from '@ui/main/forms/typesafe-form/TypesafeForm'
+import { PageHeader } from '@ui/main/layout/page-header/PageHeader'
 import { Modal } from '@ui/main/overlay/modal/Modal'
 import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
 import ShowOnly from '@ui/shared/show-only/ShowOnly'
@@ -46,7 +46,7 @@ const Page: NextPage = ({ supermarkets }: any) => {
    
    return (
       <ProtectedPage>
-         <Layout>
+         <Layout header={<PageHeader title={supermarket?.name ?? ""} />}>
             <ShowOnly when={isEmpty}>
                <div className="flex flex-col items-center w-full gap-2">
                   <p className="text-lg">No supermarket is associated with your account.</p>
@@ -54,7 +54,6 @@ const Page: NextPage = ({ supermarkets }: any) => {
                </div>
             </ShowOnly>
             <ShowOnly when={!isEmpty}>
-               <DebugData data={statsQuery.data} />
                <h2 className="text-center w-full text-lg text-gray-500">Your supermarket</h2>
                <h2 className="text-center w-full text-3xl font-medium mb-8">{supermarket?.name}</h2>
                <dl className="text-center sm:mx-auto sm:grid sm:max-w-3xl sm:grid-cols-3 sm:gap-8">

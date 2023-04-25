@@ -59,11 +59,12 @@ const Page: NextPage = () => {
    if (supermarket) {
       return (
          <ProtectedPage>
-            <Layout header={<PageHeader
-               title="Suppliers" action={<>
-               <Button onClick={creationModal.open}>Add a supplier</Button>
-            </>}
-            />}>
+            <Layout>
+               <PageHeader
+                  title="Suppliers" action={<>
+                  <Button onClick={creationModal.open}>Add a supplier</Button>
+               </>}
+               />
                <DataGrid<Supplier[]>
                   columns={columns}
                   data={supplierQuery.data}

@@ -1,3 +1,4 @@
+import { categoryRouter } from '@/server/api/routers/category'
 import { exampleRouter } from "@/server/api/routers/example"
 import { inventoryRouter } from '@/server/api/routers/inventory'
 import { supermarketRouter } from '@/server/api/routers/supermarket'
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
    supermarket: supermarketRouter,
    inventory: inventoryRouter,
    supplier: supplierRouter,
+   category: categoryRouter
 })
 
 // export type definition of API
