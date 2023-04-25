@@ -2,12 +2,22 @@ import { Button } from '@/components/ui/main/forms/button/Button'
 import LinkButton from '@/components/ui/main/forms/button/LinkButton'
 import { getServerAuthSession } from '@/server/auth'
 import { api } from "@/utils/api"
+import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
 import ShowOnly from '@ui/shared/show-only/ShowOnly'
 import { GetServerSideProps, type NextPage } from "next"
 import { signIn, signOut, useSession } from "next-auth/react"
 import Head from "next/head"
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
+   
+   const router = useRouter()
+   const { data: sessionData } = useSession()
+   
+   if(sessionData?.user) {
+      router.push('/supermarket')
+      return <LoadingSpinner />
+   }
    
    return (
       <>

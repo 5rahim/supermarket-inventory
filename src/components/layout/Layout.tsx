@@ -47,7 +47,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                         <div className="flex h-16 items-center justify-between">
                            <div className="flex items-center">
                               <div className="flex-shrink-0">
-                                 <Link href="/">
+                                 <Link href={!!session?.user ? '/supermarket': '/'}>
                                     <p className="text-white font-semibold">Supermarket Inventory</p>
                                  </Link>
                               </div>
