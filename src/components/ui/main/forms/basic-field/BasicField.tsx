@@ -74,9 +74,11 @@ export const BasicField = React.memo(React.forwardRef<HTMLDivElement, BasicField
       isRequired,
       fieldDetailsClassName,
       fieldLabelClassName,
+      hidden,
       ...rest
    } = props
    
+   if(hidden) return <>{children}</>
    
    return (
       <>
@@ -89,11 +91,11 @@ export const BasicField = React.memo(React.forwardRef<HTMLDivElement, BasicField
             {...rest}
             ref={ref}
          >
-            <ShowOnly when={!!label}>
+            <ShowOnly when={!!label && !hidden}>
                <label
                   htmlFor={id}
                   className={cn(
-                     "text-[1rem] font-semibold self-start",
+                     "text-lg font-semibold self-start",
                      {
                         "text-red-500": !!error,
                      },
@@ -110,7 +112,7 @@ export const BasicField = React.memo(React.forwardRef<HTMLDivElement, BasicField
             
             {children}
             
-            <ShowOnly when={!!help || !!error}>
+            <ShowOnly when={(!!help || !!error) && !hidden}>
                <div className={cn("", fieldDetailsClassName)}>
                   {!!help && <p className="text-sm text-gray-500">{help}</p>}
                   {!!error && <p className="text-sm text-red-500">{error}</p>}

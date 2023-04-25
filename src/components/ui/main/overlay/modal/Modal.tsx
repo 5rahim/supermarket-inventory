@@ -2,9 +2,9 @@ import { cn } from '@/lib/tailwind/tailwind-utils'
 import { Dialog, Transition } from '@headlessui/react'
 import { Button, ButtonProps } from '@ui/main/forms/button/Button'
 import ShowOnly from '@ui/shared/show-only/ShowOnly'
+import { uuid } from '@zag-js/utils'
 import { cva, VariantProps } from 'class-variance-authority'
 import React, { Fragment } from 'react'
-import { v4 as uuid } from 'uuid'
 
 const modalStyles = cva('', {
    variants: {
@@ -58,7 +58,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
                </Transition.Child>
                
                <div className="fixed inset-0 overflow-y-auto">
-                  <div className="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 text-center">
+                  <div className="flex min-h-full items-end sm:items-start justify-center p-0 sm:p-4 sm:py-16 text-center">
                      <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"

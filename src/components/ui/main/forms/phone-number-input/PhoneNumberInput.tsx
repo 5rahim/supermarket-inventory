@@ -1,5 +1,5 @@
 import { cn } from '@/lib/tailwind/tailwind-utils'
-import { Nullable } from '@/types'
+import { Nullish } from '@/types'
 import { BasicField, extractBasicFieldProps } from '@ui/main/forms/basic-field/BasicField'
 import { inputStyles, TextInputProps } from '@ui/main/forms/input/TextInput'
 import { CountryCode, E164Number } from 'libphonenumber-js'
@@ -8,7 +8,7 @@ import PhoneInput from 'react-phone-number-input'
 
 
 export interface PhoneNumberInputProps extends Omit<TextInputProps, "value" | "onChange"> {
-   value: Nullable<string>
+   value: Nullish<string>
    onChange: (value: E164Number | undefined) => void
    defaultCountry?: string
 }

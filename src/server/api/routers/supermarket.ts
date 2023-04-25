@@ -2,8 +2,10 @@ import { supermarketSchema } from '@/pages/supermarket'
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { Prisma, Supermarket } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-import { uuid } from '@zag-js/utils'
+import { v4 } from 'uuid'
 import { z } from "zod"
+
+export const bigIntToNumber = (v: any) => typeof v === "bigint" ? Number((v as any).toString()) : v
 
 export const supermarketRouter = createTRPCRouter({
    getUserSupermarket: protectedProcedure
@@ -13,36 +15,52 @@ export const supermarketRouter = createTRPCRouter({
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'User id is empty' })
          
          const supermarkets = await ctx.prisma.$queryRaw<Supermarket[]>(
-            Prisma.sql`SELECT * FROM Supermarket WHERE userId = ${input.userId} LIMIT 1`
+            Prisma.sql`SELECT *
+                       FROM Supermarket
+                       WHERE userId = ${input.userId}
+                       LIMIT 1`,
          )
          
          return supermarkets?.[0] ?? null
          
       }),
-   testJoin: protectedProcedure
-      .input(z.object({ userId: z.string().nullish() }))
+   getStats: protectedProcedure
+      .input(z.object({ supermarketId: z.string().nullish() }))
       .query(async ({ ctx, input }) => {
-         if (!input.userId)
+         if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'User id is empty' })
          
-         const supermarkets = await ctx.prisma.$queryRaw<Supermarket[]>(
-            Prisma.sql`SELECT S.name Sname, U.name Uname FROM User as U JOIN Supermarket as S ON S.userId = U.id WHERE U.id = ${input.userId}`
+         const res = await ctx.prisma.$queryRaw<any>(
+            Prisma.sql`
+                SELECT COUNT(Product.id) productCount, COUNT(SupplierOrder.id) orderCount, SUM(Product.cost * Sale.quantity) revenue
+                FROM Product
+                         INNER JOIN Sale ON Product.id = Sale.productId
+                         LEFT JOIN SupplierOrder ON Product.id = SupplierOrder.productId AND SupplierOrder.status = 'pending'
+                WHERE Product.supermarketId = ${input.supermarketId}
+            `,
          )
          
-         return supermarkets
+         const status: { productCount: number, orderCount: number, revenue: number } = {
+            productCount: bigIntToNumber(res[0].productCount),
+            orderCount: bigIntToNumber(res[0].orderCount),
+            revenue: bigIntToNumber(res[0].revenue) ?? 0,
+         }
+         
+         return status
          
       }),
    create: protectedProcedure
       .input(
-         supermarketSchema
+         supermarketSchema,
       )
       .mutation(async ({ ctx, input }) => {
-         const userId = ctx.session.user.id;
+         const userId = ctx.session.user.id
          
          const supermarket = await ctx.prisma.$executeRaw(
-            Prisma.sql`INSERT INTO Supermarket (id, name, userId) VALUES (${uuid()}, ${input.name}, ${userId})`
+            Prisma.sql`INSERT INTO Supermarket (id, name, userId)
+                       VALUES (${v4()}, ${input.name}, ${userId})`,
          )
          
-         return supermarket;
+         return supermarket
       }),
 })

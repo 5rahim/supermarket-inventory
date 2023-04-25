@@ -16,7 +16,7 @@ export const inputStyles = cva([
       variants: {
          size: {
             sm: "px-2 py-1.5 text-sm",
-            md: "px-2 py-1 text-[.95rem]",
+            md: "px-3 py-2 text-base",
             lg: "px-4 py-2.5 text-lg",
          },
          intent: {
@@ -114,11 +114,23 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>((pro
       ...rest
    }, basicFieldProps] = extractBasicFieldProps<TextInputProps>(props, useId())
    
+   if(rest.hidden) return (
+      <input
+         // type="text"
+         id={basicFieldProps.id}
+         name={basicFieldProps.name}
+         disabled={basicFieldProps.isDisabled}
+         {...rest}
+         ref={ref}
+      />
+   )
+   
    return (
       <>
          <BasicField
             className={cn("w-full gap-1")}
             {...basicFieldProps}
+            hidden={rest.hidden}
          >
             <div className={cn(inputContainerStyle())}>
                
@@ -136,6 +148,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>((pro
                      className,
                   )}
                   disabled={basicFieldProps.isDisabled}
+                  autoComplete="off"
                   {...rest}
                   ref={ref}
                />

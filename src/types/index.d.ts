@@ -1,6 +1,6 @@
 import { z as zod, ZodType } from 'zod'
 
-export type Nullable<T> = T | null | undefined
+export type Nullish<T> = T | null | undefined
 
 export type MaybeRenderProp<P> =
    | React.ReactNode

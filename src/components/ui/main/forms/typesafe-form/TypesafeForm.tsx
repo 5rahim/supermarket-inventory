@@ -17,6 +17,7 @@ export interface TypesafeFormProps<TFields extends FieldValues = FieldValues>
    formRef?: React.RefObject<HTMLFormElement>
    children?: MaybeRenderProp<UseFormReturn<TFields>>
    stackClassName?: string
+   defaultValues?: any
    mRef?: React.Ref<UseFormReturn<TFields>>
 }
 
