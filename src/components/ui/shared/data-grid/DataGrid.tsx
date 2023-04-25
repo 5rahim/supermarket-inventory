@@ -271,7 +271,7 @@ export function DataGrid<T extends Array<any>>(props: DataGridProps<T>) {
                                        <td
                                           key={cell.id}
                                           className={cn(
-                                             "px-2 py-2 whitespace-nowrap text-sm font-medium text-gray-900 truncate overflow-ellipsis",
+                                             "px-2 py-2 whitespace-nowrap text-md font-medium text-gray-900 truncate overflow-ellipsis",
                                              {
                                                 "px-2 sm:px-0 text-center": index === 0 && enableRowSelection,
                                              },

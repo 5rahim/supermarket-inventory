@@ -7,8 +7,8 @@ import { z } from "zod"
 
 
 export const inventoryRouter = createTRPCRouter({
-   getAll: protectedProcedure
-      .input(z.object({ supermarketId: z.string() }))
+   getAllProducts: protectedProcedure
+      .input(z.object({ supermarketId: z.string().nullish() }))
       .query(async ({ ctx, input }) => {
          if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
@@ -22,7 +22,7 @@ export const inventoryRouter = createTRPCRouter({
          return products
          
       }),
-   getCount: protectedProcedure
+   getProductCount: protectedProcedure
       .input(z.object({ supermarketId: z.string() }))
       .query(async ({ ctx, input }) => {
          if (!input.supermarketId)
@@ -41,9 +41,9 @@ export const inventoryRouter = createTRPCRouter({
          
          return await ctx.prisma.$executeRaw(
             Prisma.sql`
-                INSERT INTO Product (id, code, name, description, unit, cost, quantityLeft, dateDelivered, supplierId, categoryId, supermarketId)
+                INSERT INTO Product (id, code, name, description, unit, cost, quantityLeft, supplierId, categoryId, supermarketId)
                 VALUES (${uuid()}, ${input.code}, ${input.name}, ${input.description}, ${input.unit}, ${input.cost}, ${input.quantityLeft},
-                        ${input.dateDelivered}, ${input.supplierId}, ${input.categoryId}, ${input.supermarketId})
+                    ${input.supplierId}, ${input.categoryId}, ${input.supermarketId})
             `,
          )
       }),
@@ -57,15 +57,14 @@ export const inventoryRouter = createTRPCRouter({
          return await ctx.prisma.$executeRaw(
             Prisma.sql`
                 UPDATE Product
-                SET code         = ${input.code},
-                    name         = ${input.name},
-                    description  = ${input.description},
-                    unit         = ${input.unit},
-                    cost=${input.cost},
-                    quantityLeft=${input.quantityLeft},
-                    dateDelivered=${input.dateDelivered},
-                    supplierId=${input.supplierId},
-                    categoryId=${input.categoryId}
+                SET code          = ${input.code},
+                    name          = ${input.name},
+                    description   = ${input.description},
+                    unit          = ${input.unit},
+                    cost          = ${input.cost},
+                    quantityLeft  = ${input.quantityLeft},
+                    supplierId    = ${input.supplierId},
+                    categoryId    = ${input.categoryId}
                 WHERE id = ${input.id}
             `,
          )

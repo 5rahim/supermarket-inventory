@@ -3,7 +3,11 @@ import { createPolymorphicComponent } from '@/utils/polymorphic-component'
 import { BasicFieldOptions } from '@ui/main/forms/basic-field/BasicField'
 import { Checkbox, CheckboxProps } from '@ui/main/forms/checkbox/Checkbox'
 import { CheckboxGroup, CheckboxGroupProps } from '@ui/main/forms/checkbox/CheckboxGroup'
+import { DatePicker, DatePickerProps } from '@ui/main/forms/date-time/date-picker/DatePicker'
+import { DateRangePicker, DateRangePickerProps } from '@ui/main/forms/date-time/date-picker/DateRangePicker'
+import { TimeInput, TimeInputProps } from '@ui/main/forms/date-time/date-picker/TimeInput'
 import { NumberInput, NumberInputProps } from '@ui/main/forms/input/NumberInput'
+import { PriceInput, PriceInputProps } from '@ui/main/forms/input/PriceInput'
 import { TextInput, TextInputProps } from '@ui/main/forms/input/TextInput'
 import { MultiSelect, MultiSelectProps } from '@ui/main/forms/multi-select/MultiSelect'
 import { PhoneNumberInput, PhoneNumberInputProps } from '@ui/main/forms/phone-number-input/PhoneNumberInput'
@@ -216,6 +220,26 @@ export const SegmentedControlField = React.memo(withControlledInput<FieldCompone
    },
 )))
 
+export const DatePickerField =
+   React.memo(withControlledInput<FieldComponent<DatePickerProps>>(forwardRef<HTMLDivElement, FieldComponent<DatePickerProps>>((props, ref) => {
+         const context = useFormContext()
+         return <DatePicker defaultValue={get(context.formState.defaultValues, props.name)} {...props} ref={ref} />
+      },
+   )))
+export const DateRangePickerField = React.memo(withControlledInput<FieldComponent<DateRangePickerProps>>(forwardRef<HTMLDivElement,
+   FieldComponent<DateRangePickerProps>>((props, ref) => {
+   const context = useFormContext()
+   return <DateRangePicker
+      defaultValue={get(context.formState.defaultValues, props.name)} {...props} ref={ref}
+   />
+})))
+export const TimeField =
+   React.memo(withControlledInput<FieldComponent<TimeInputProps>>(forwardRef<HTMLDivElement, FieldComponent<TimeInputProps>>((props, ref) => {
+         const context = useFormContext()
+         return <TimeInput defaultValue={get(context.formState.defaultValues, props.name)} {...props} ref={ref} />
+      },
+   )))
+
 type PhoneNumberInputFieldProps = Omit<PhoneNumberInputProps, "onChange" | "value">
 export const PhoneNumberInputField = React.memo(withControlledInput<FieldComponent<PhoneNumberInputFieldProps>>(forwardRef<HTMLInputElement, FieldComponent<PhoneNumberInputFieldProps>>(
    (props, ref) => {
@@ -225,6 +249,19 @@ export const PhoneNumberInputField = React.memo(withControlledInput<FieldCompone
          {...props}
          onChange={callAllHandlers(props.onChange, controller.field.onChange)}
          value={get(context.formState.defaultValues, props.name)}
+      />
+   },
+)))
+
+export const PriceInputField = React.memo(withControlledInput<FieldComponent<PriceInputProps>>(forwardRef<HTMLInputElement, FieldComponent<PriceInputProps>>(
+   (props, ref) => {
+      const context = useFormContext()
+      return <PriceInput
+         {...props}
+         defaultValue={get(context.formState.defaultValues, props.name) ?? 0}
+         country={"us"}
+         locale={"en"}
+         ref={ref}
       />
    },
 )))
@@ -242,6 +279,10 @@ _Field.SegmentedControl = SegmentedControlField
 _Field.PhoneNumber = PhoneNumberInputField
 _Field.Number = NumberField
 _Field.MultiSelect = MultiSelectField
+_Field.Price = PriceInputField
+_Field.DatePicker = DatePickerField
+_Field.DateRangePicker = DateRangePickerField
+_Field.Time = TimeField
 _Field.Submit = SubmitField
 
 export const Field = createPolymorphicComponent<'div', FieldProps, {
@@ -256,7 +297,11 @@ export const Field = createPolymorphicComponent<'div', FieldProps, {
    SegmentedControl: typeof SegmentedControlField,
    PhoneNumber: typeof PhoneNumberInputField,
    Number: typeof NumberField,
-   MultiSelect: typeof MultiSelectField
+   MultiSelect: typeof MultiSelectField,
+   Price: typeof PriceInputField,
+   DatePicker: typeof DatePickerField
+   DateRangePicker: typeof DateRangePickerField
+   Time: typeof TimeField
    Submit: typeof SubmitField
 }>(_Field)
 

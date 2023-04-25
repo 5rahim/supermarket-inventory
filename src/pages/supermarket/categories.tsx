@@ -1,4 +1,5 @@
 import { ProtectedPage } from '@/components/auth/ProtectedPage'
+import DebugData from '@/components/DebugData'
 import { Layout } from '@/components/layout/Layout'
 import { useDisclosure } from '@/hooks/use-disclosure'
 import { useSupermarket } from '@/hooks/use-supermarket'
@@ -18,7 +19,7 @@ import { DataGrid } from '@ui/shared/data-grid/DataGrid'
 import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
 import { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { v4 } from 'uuid'
 
 export const categorySchema = createTypesafeFormSchema(({ z, presets }) => z.object({
@@ -40,8 +41,13 @@ const Page: NextPage = () => {
             accessorKey: 'name',
             header: 'Name',
             cell: info => <Item data={info.row.original} />,
-            size: 100,
-            footer: props => props.column.id,
+            size: 60,
+         },
+         {
+            accessorKey: 'productCount',
+            header: () => <div>Number of products</div>,
+            cell: info => <span>{info.getValue() as number}</span>,
+            size: 60,
          },
       ]
    }, [categoryQuery.data])
@@ -56,6 +62,7 @@ const Page: NextPage = () => {
                <Button onClick={creationModal.open}>Add a category</Button>
             </>}
             />}>
+               <DebugData data={categoryQuery.data} />
                <DataGrid<Category[]>
                   columns={columns}
                   data={categoryQuery.data}
@@ -87,7 +94,7 @@ interface ItemProps {
    data: Category
 }
 
-export const Item: React.FC<ItemProps> = (props) => {
+export const Item: React.FC<ItemProps> = memo((props) => {
    
    const { children, data, ...rest } = props
    
@@ -98,7 +105,7 @@ export const Item: React.FC<ItemProps> = (props) => {
          className="flex items-center gap-4 cursor-pointer"
          onClick={modal.open}
       >
-         <span className="text-xl font-semibold flex-none">{data.name as string}</span>
+         <span className="text-lg font-semibold flex-none">{data.name as string}</span>
          <BiEditAlt className="text-lg" />
       </a>
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
@@ -106,7 +113,7 @@ export const Item: React.FC<ItemProps> = (props) => {
       </Modal>
    </>
    
-}
+})
 
 interface AddFormProps {
    children?: React.ReactNode

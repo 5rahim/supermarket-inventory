@@ -107,7 +107,6 @@ model Product {
     unit String
     cost Int
     quantityLeft Int
-    dateDelivered DateTime?
     supplier Supplier @relation(fields: [supplierId], references: [id])
     supplierId String
     category Category @relation(fields: [categoryId], references: [id])

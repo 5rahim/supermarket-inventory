@@ -1,4 +1,5 @@
 import { categorySchema } from '@/pages/supermarket/categories'
+import { bigIntToNumber } from '@/server/api/routers/supermarket'
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { Category, Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
@@ -13,13 +14,21 @@ export const categoryRouter = createTRPCRouter({
          if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
          
-         const res = await ctx.prisma.$queryRaw<(Category)[]>(
-            Prisma.sql`SELECT Category.*
+         const res = await ctx.prisma.$queryRaw<(Category & { productCount: number })[]>(
+            Prisma.sql`SELECT Category.*, COUNT(Product.id) productCount
                        FROM Category
-                       WHERE Category.supermarketId = ${input.supermarketId}`,
+                                LEFT JOIN Product ON Product.categoryId = Category.id
+                       WHERE Category.supermarketId = ${input.supermarketId}
+                       GROUP BY Category.id
+            `,
          )
          
-         return res
+         const categories = res.map(n => ({
+            ...n,
+            productCount: bigIntToNumber(n.productCount) ?? 0
+         }))
+         
+         return categories
          
       }),
    create: protectedProcedure
@@ -43,7 +52,7 @@ export const categoryRouter = createTRPCRouter({
          return await ctx.prisma.$executeRaw(
             Prisma.sql`
                 UPDATE Category
-                SET name  = ${input.name},
+                SET name = ${input.name}
                 WHERE id = ${input.id}
             `,
          )

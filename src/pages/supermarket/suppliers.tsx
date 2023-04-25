@@ -106,7 +106,7 @@ export const Item: React.FC<ItemProps> = (props) => {
          className="flex items-center gap-4 cursor-pointer"
          onClick={modal.open}
       >
-         <span className="text-xl font-semibold flex-none">{data.name as string}</span>
+         <span className="text-lg font-semibold flex-none">{data.name as string}</span>
          <BiEditAlt className="text-lg" />
       </a>
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
