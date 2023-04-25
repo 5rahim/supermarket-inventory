@@ -7,7 +7,7 @@ import React, { useId } from 'react'
 export const inputStyles = cva([
       "w-full rounded-md border-gray-300 placeholder-gray-400",
       "disabled:bg-gray-50 disabled:border-gray-200 disabled:text-gray-500 disabled:shadow-none disabled:pointer-events-none",
-      "focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500",
+      "focus:border-brand-500 focus:ring-1 focus:ring-brand-500",
       'outline-none focus:outline-none',
       "transition duration-150",
       "shadow-sm",

@@ -186,7 +186,7 @@ export const MultiSelect = React.forwardRef<HTMLInputElement, MultiSelectProps>(
                      inputRootStyle({
                         size, intent, isDisabled: basicFieldProps.isDisabled || isLoading, hasError: !!basicFieldProps.error, leftIcon, leftAddon,
                      }),
-                     { "border-indigo-500 hover:border-indigo-500 ring-1 ring-indigo-500": inputFocused.isOpen },
+                     { "border-brand-500 hover:border-brand-500 ring-1 ring-brand-500": inputFocused.isOpen },
                   )}
                   onClick={(e) => {
                      if (!inputFocused.isOpen && !isLoading) {

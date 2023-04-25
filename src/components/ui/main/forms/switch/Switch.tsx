@@ -108,7 +108,7 @@ export const Switch = React.forwardRef<HTMLDivElement, SwitchProps>((props, ref)
                      className={cn(
                         "absolute inset-0 rounded-full bg-gray-300 transition",
                         "hover:bg-gray-400",
-                        "data-checked:bg-indigo-500 data-checked:border-indigo-500",
+                        "data-checked:bg-brand-500 data-checked:border-brand-500",
                         "data-disabled:bg-gray-200 data-disabled:text-gray-200 data-disabled:cursor-default",
                         {
                            "border-red-500": !!basicFieldProps.error,

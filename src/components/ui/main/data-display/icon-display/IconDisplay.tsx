@@ -6,25 +6,25 @@ import React from 'react'
 const elementStyles = cva('border', {
    variants: {
       intent: {
-         primary: 'border-transparent bg-indigo-500 text-white',
+         primary: 'border-transparent bg-brand-500 text-white',
          success: 'border-transparent bg-green-500 text-white',
          alert: 'border-transparent bg-red-500 text-white',
          warning: 'border-transparent bg-orange-500 text-white',
          gray: 'border-transparent bg-gray-500 text-white',
          
-         'primary-subtle': 'border-transparent bg-indigo-50 text-indigo-500',
+         'primary-subtle': 'border-transparent bg-brand-50 text-brand-500',
          'success-subtle': 'border-transparent bg-green-50 text-green-500',
          'alert-subtle': 'border-transparent bg-red-50 text-red-500',
          'warning-subtle': 'border-transparent bg-orange-50 text-orange-500',
          'gray-subtle': 'border-transparent bg-gray-50 text-gray-500',
          
-         'primary-outline': 'border-indigo-500 text-indigo-500 bg-transparent',
+         'primary-outline': 'border-brand-500 text-brand-500 bg-transparent',
          'success-outline': 'border-green-500 text-green-500 bg-transparent',
          'alert-outline': 'border-red-500 text-red-500 bg-transparent',
          'warning-outline': 'border-orange-500 text-orange-500 bg-transparent',
          'gray-outline': 'border-gray-500 text-gray-500 bg-transparent',
          
-         'primary-basic': 'border-transparent text-indigo-500 bg-transparent',
+         'primary-basic': 'border-transparent text-brand-500 bg-transparent',
          'success-basic': 'border-transparent text-green-500 bg-transparent',
          'alert-basic': 'border-transparent text-red-500 bg-transparent',
          'warning-basic': 'border-transparent text-orange-500 bg-transparent',

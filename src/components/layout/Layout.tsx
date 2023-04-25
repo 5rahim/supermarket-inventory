@@ -26,6 +26,9 @@ export const Layout: React.FC<LayoutProps> = (props) => {
    const navigation = [
       { name: 'My supermarket', href: '/supermarket', current: false },
       { name: 'Inventory', href: '/supermarket/inventory', current: false },
+      { name: 'Categories', href: '/supermarket/categories', current: false },
+      { name: 'Suppliers', href: '/supermarket/suppliers', current: false },
+      { name: 'Supplier orders', href: '/supermarket/supplier-orders', current: false },
    ]
    const userNavigation = [
       { name: 'Sign out', href: '/api/auth/signout' },
@@ -34,7 +37,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
    return (
       <>
          <div className="min-h-full">
-            <Disclosure as="nav" className="bg-indigo-600">
+            <Disclosure as="nav" className="bg-brand-600">
                {({ open }) => (
                   <>
                      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -42,7 +45,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                            <div className="flex items-center">
                               <div className="flex-shrink-0">
                                  <Link href="/">
-                                    <p className="text-white">Supermarket Inventory</p>
+                                    <p className="text-white font-semibold">Supermarket Inventory</p>
                                  </Link>
                               </div>
                               <div className="hidden md:block">
@@ -53,9 +56,9 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                           href={item.href}
                                           className={cn(
                                              item.current
-                                                ? 'bg-indigo-700 text-white'
-                                                : 'text-white hover:bg-indigo-500 hover:bg-opacity-75',
-                                             'px-3 py-2 rounded-md text-sm font-medium',
+                                                ? 'bg-brand-700 text-white'
+                                                : 'text-white hover:bg-brand-500 hover:bg-opacity-75',
+                                             'px-3 py-2 rounded-md text-sm',
                                           )}
                                           aria-current={item.current ? 'page' : undefined}
                                        >
@@ -71,7 +74,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                  {/* Profile dropdown */}
                                  <Menu as="div" className="relative ml-3">
                                     <div>
-                                       <Menu.Button className="flex max-w-xs items-center rounded-full bg-indigo-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600">
+                                       <Menu.Button className="flex max-w-xs items-center rounded-full bg-brand-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-600">
                                           <span className="sr-only">Open user menu</span>
                                           {user.imageUrl && <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />}
                                        </Menu.Button>
@@ -108,7 +111,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                            </div>
                            <div className="-mr-2 flex md:hidden">
                               {/* Mobile menu button */}
-                              <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-indigo-600 p-2 text-indigo-200 hover:bg-indigo-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600">
+                              <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-brand-600 p-2 text-brand-200 hover:bg-brand-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-600">
                                  <span className="sr-only">Open main menu</span>
                                  {open ? (
                                     <BiX className="block h-6 w-6" aria-hidden="true" />
@@ -129,8 +132,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                  href={item.href}
                                  className={cn(
                                     item.current
-                                       ? 'bg-indigo-700 text-white'
-                                       : 'text-white hover:bg-indigo-500 hover:bg-opacity-75',
+                                       ? 'bg-brand-700 text-white'
+                                       : 'text-white hover:bg-brand-500 hover:bg-opacity-75',
                                     'block px-3 py-2 rounded-md text-base font-medium',
                                  )}
                                  aria-current={item.current ? 'page' : undefined}
@@ -139,14 +142,14 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                               </Disclosure.Button>
                            ))}
                         </div>
-                        <div className="border-t border-indigo-700 pt-4 pb-3">
+                        <div className="border-t border-brand-700 pt-4 pb-3">
                            <div className="flex items-center px-5">
                               <div className="flex-shrink-0">
                                  {user.imageUrl && <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />}
                               </div>
                               <div className="ml-3">
                                  <div className="text-base font-medium text-white">{user.name}</div>
-                                 <div className="text-sm font-medium text-indigo-300">{user.email}</div>
+                                 <div className="text-sm font-medium text-brand-300">{user.email}</div>
                               </div>
                            </div>
                            <div className="mt-3 space-y-1 px-2">
@@ -155,7 +158,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     key={item.name}
                                     as="a"
                                     href={item.href}
-                                    className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
+                                    className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-brand-500 hover:bg-opacity-75"
                                  >
                                     {item.name}
                                  </Disclosure.Button>
@@ -175,7 +178,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             <main>
                <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
                   {/* Replace with your content */}
-                  <div className="p-4 rounded-lg border-4 border border-gray-200">
+                  <div className="p-4 rounded-lg border shadow-sm border-gray-200">
                      <div className="">
                         {children}
                      </div>

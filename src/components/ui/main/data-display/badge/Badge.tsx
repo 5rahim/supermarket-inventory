@@ -8,13 +8,13 @@ const elementStyles = cva(null, {
    variants: {
       intent: {
          gray: 'text-gray-800 bg-gray-100',
-         primary: 'text-indigo-500 bg-indigo-50',
+         primary: 'text-brand-500 bg-brand-50',
          success: 'text-green-500 bg-green-50',
          warning: 'text-orange-500 bg-orange-50',
          alert: 'text-red-500 bg-red-50',
          blue: 'text-blue-500 bg-blue-50',
          'basic': 'text-gray-900 bg-transparent',
-         'primary-solid': 'text-white bg-indigo-500',
+         'primary-solid': 'text-white bg-brand-500',
          'success-solid': 'text-white bg-green-500',
          'warning-solid': 'text-white bg-orange-500',
          'alert-solid': 'text-white bg-red-500',

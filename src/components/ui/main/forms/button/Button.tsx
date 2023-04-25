@@ -6,11 +6,11 @@ import React, { CSSProperties } from 'react'
 const buttonStyles = cva(`py-2 px-4 shadow-sm whitespace-nowrap`, {
    variants: {
       intent: {
-         'primary': 'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 border border-transparent',
-         'primary-outline': 'text-indigo-500 border border-indigo-200 bg-transparent hover:border-indigo-500 hover:bg-indigo-500 active:bg-indigo-600 hover:text-white',
-         'primary-subtle': 'text-indigo-600 border border-indigo-500 bg-indigo-50 border-transparent hover:bg-indigo-100 active:bg-indigo-50',
-         'primary-link': 'shadow-none text-indigo-500 border border-transparent bg-transparent hover:underline active:text-indigo-700',
-         'primary-basic': 'shadow-none text-indigo-500 border border-transparent bg-transparent hover:text-indigo-600 active:text-indigo-700',
+         'primary': 'bg-brand-500 hover:bg-brand-600 active:bg-brand-700 border border-transparent',
+         'primary-outline': 'text-brand-500 border border-brand-200 bg-transparent hover:border-brand-500 hover:bg-brand-500 active:bg-brand-600 hover:text-white',
+         'primary-subtle': 'text-brand-600 border border-brand-500 bg-brand-50 border-transparent hover:bg-brand-100 active:bg-brand-50',
+         'primary-link': 'shadow-none text-brand-500 border border-transparent bg-transparent hover:underline active:text-brand-700',
+         'primary-basic': 'shadow-none text-brand-500 border border-transparent bg-transparent hover:text-brand-600 active:text-brand-700',
          
          'warning': 'bg-orange-500 hover:bg-orange-600 active:bg-orange-700 border border-transparent',
          'warning-outline': 'text-orange-500 border border-orange-200 bg-transparent hover:bg-orange-500 active:bg-orange-600 hover:text-white',

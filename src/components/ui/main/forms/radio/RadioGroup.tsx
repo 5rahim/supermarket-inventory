@@ -102,10 +102,10 @@ export const RadioGroup = React.forwardRef<HTMLInputElement, RadioGroupProps>((p
                      <div
                         className={cn(
                            "inline-flex flex-none justify-center items-center border border-gray-300 rounded-full text-white bg-white cursor-pointer transition duration-10 relative",
-                           "hover:bg-indigo-100",
-                           "data-checked:bg-indigo-500 data-checked:border-indigo-500",
+                           "hover:bg-brand-100",
+                           "data-checked:bg-brand-500 data-checked:border-brand-500",
                            "data-disabled:bg-gray-100 data-disabled:border-gray-200 data-disabled:text-gray-100 data-disabled:cursor-default",
-                           "data-disabled:data-checked:bg-indigo-100 data-disabled:data-checked:border-indigo-100",
+                           "data-disabled:data-checked:bg-brand-100 data-disabled:data-checked:border-brand-100",
                            {
                               "border-red-500": !!basicFieldProps.error,
                            },

@@ -6,6 +6,7 @@ import { Inter } from '@next/font/google'
 import { type Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 import { type AppType } from "next/app"
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({
    subsets: ["latin"],
@@ -26,6 +27,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             )}
          >
             <Component {...pageProps} />
+            <Toaster position="bottom-center" />
          </main>
       </SessionProvider>
    )

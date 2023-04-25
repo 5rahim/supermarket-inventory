@@ -63,7 +63,7 @@ export function IndeterminateCheckbox({
          type="checkbox"
          ref={ref}
          className={cn("form-checkbox cursor-pointer rounded-md w-5 h-5 border-gray-300 hover:bg-white",
-            "checked:bg-indigo-500 hover:checked:bg-indigo-500 focus:checked:bg-indigo-500 indeterminate:bg-gray-400 hover:indeterminate:bg-gray-400 focus:indeterminate:bg-gray-400 focus:ring-indigo-500",
+            "checked:bg-brand-500 hover:checked:bg-brand-500 focus:checked:bg-brand-500 indeterminate:bg-gray-400 hover:indeterminate:bg-gray-400 focus:indeterminate:bg-gray-400 focus:ring-brand-500",
             className,
          )}
          {...rest}
@@ -138,10 +138,10 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>((props, 
                <div
                   className={cn(
                      "inline-flex justify-center items-center border border-gray-300 rounded text-white bg-white cursor-pointer transition duration-10",
-                     "hover:bg-indigo-100",
-                     "data-checked:bg-indigo-500 data-checked:border-indigo-500",
+                     "hover:bg-brand-100",
+                     "data-checked:bg-brand-500 data-checked:border-brand-500",
                      "data-disabled:bg-gray-100 data-disabled:border-gray-200 data-disabled:text-gray-100 data-disabled:cursor-default",
-                     "data-disabled:data-checked:bg-indigo-100  data-disabled:data-checked:border-indigo-100",
+                     "data-disabled:data-checked:bg-brand-100  data-disabled:data-checked:border-brand-100",
                      {
                         "border-red-500": !!error,
                      },
