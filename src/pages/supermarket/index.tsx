@@ -67,7 +67,7 @@ const Page: NextPage = ({ supermarkets }: any) => {
                   {/*</div>*/}
                   <div className="mt-10 flex flex-col sm:mt-0">
                      <dt className="order-2 mt-2 text-lg font-medium leading-6 text-brand-500">Revenue</dt>
-                     <dd className="order-1 text-5xl font-bold tracking-tight">${priceFormatter.toFormat(statsQuery.data?.revenue ?? 0)}</dd>
+                     <dd className="order-1 text-5xl font-bold tracking-tight">{statsQuery.data?.revenue === 0 ? '$0' : priceFormatter.toFormat(statsQuery.data?.revenue ?? 0)}</dd>
                   </div>
                </dl>
             </ShowOnly>

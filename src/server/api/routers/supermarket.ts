@@ -31,26 +31,30 @@ export const supermarketRouter = createTRPCRouter({
          if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'User id is empty' })
          
-         const res = await ctx.prisma.$queryRaw<any>(
-            Prisma.sql`
-                SELECT COUNT(Product.id) productCount
-                FROM Product
-                WHERE Product.supermarketId = ${input.supermarketId}
-            `,
-         )
+         // const res = await ctx.prisma.$queryRaw<any>(
+         //    Prisma.sql`
+         //        SELECT COUNT(Product.id) productCount
+         //        FROM Product
+         //        WHERE Product.supermarketId = ${input.supermarketId}
+         //    `,
+         // )
          
          const res2 = await ctx.prisma.$queryRaw<any>(
             Prisma.sql`
-                SELECT COUNT(Product.id) productCount
-                FROM Product
-                WHERE Product.supermarketId = ${input.supermarketId}
+                SELECT COUNT(P.id) productCount, SUM(SL.quantity * P.cost) revenue
+                FROM Supermarket S
+                LEFT JOIN Product P ON P.supermarketId = S.id
+                LEFT JOIN Sale SL ON SL.supermarketId = S.id
+                WHERE S.id = ${input.supermarketId}
             `,
          )
          
+         console.log(res2)
+         
          const status: { productCount: number, orderCount: number, revenue: number } = {
-            productCount: bigIntToNumber(res[0].productCount),
-            orderCount: bigIntToNumber(res[0].orderCount) ?? 0,
-            revenue: bigIntToNumber(res[0].revenue) ?? 0,
+            productCount: bigIntToNumber(res2[0].productCount),
+            orderCount: bigIntToNumber(res2[0].orderCount) ?? 0,
+            revenue: bigIntToNumber(res2[0].revenue) ?? 0,
          }
          
          return status
