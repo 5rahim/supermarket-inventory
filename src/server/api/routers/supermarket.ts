@@ -39,6 +39,14 @@ export const supermarketRouter = createTRPCRouter({
             `,
          )
          
+         const res2 = await ctx.prisma.$queryRaw<any>(
+            Prisma.sql`
+                SELECT COUNT(Product.id) productCount
+                FROM Product
+                WHERE Product.supermarketId = ${input.supermarketId}
+            `,
+         )
+         
          const status: { productCount: number, orderCount: number, revenue: number } = {
             productCount: bigIntToNumber(res[0].productCount),
             orderCount: bigIntToNumber(res[0].orderCount) ?? 0,

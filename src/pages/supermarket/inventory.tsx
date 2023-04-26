@@ -1,6 +1,7 @@
 import { ProtectedPage } from '@/components/auth/ProtectedPage'
 import { Layout } from '@/components/layout/Layout'
 import { useDisclosure } from '@/hooks/use-disclosure'
+import { usePriceFormatter } from '@/hooks/use-price-formatter'
 import { useSupermarket } from '@/hooks/use-supermarket'
 import { getServerAuthSession } from '@/server/auth'
 import { InferType } from '@/types'
@@ -14,12 +15,13 @@ import { Field } from '@ui/main/forms/typesafe-form/Field'
 import { TypesafeForm } from '@ui/main/forms/typesafe-form/TypesafeForm'
 import { PageHeader } from '@ui/main/layout/page-header/PageHeader'
 import { Modal } from '@ui/main/overlay/modal/Modal'
+import { DangerZone } from '@ui/shared/danger-zone/DangerZone'
 import { DataGrid } from '@ui/shared/data-grid/DataGrid'
 import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
-import _ from 'lodash'
 import { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
+
 import { v4 } from 'uuid'
 
 export const productSchema = createTypesafeFormSchema(({ z, presets }) => z.object({
@@ -35,6 +37,8 @@ export const productSchema = createTypesafeFormSchema(({ z, presets }) => z.obje
    categoryId: z.string(),
 }))
 
+export type IProduct = Product & { supplierName: string, categoryName: string }
+
 export const _units = ['Unit', 'Liter', 'Gallon', 'Kilogram', 'Pound']
 
 const Page: NextPage = () => {
@@ -42,6 +46,7 @@ const Page: NextPage = () => {
    
    const creationModal = useDisclosure(false)
    const { supermarket, isLoading, isEmpty } = useSupermarket()
+   const priceFormatter = usePriceFormatter()
    const productQuery = api.inventory.getAllProducts.useQuery({ supermarketId: supermarket?.id }, { enabled: !!supermarket, refetchOnWindowFocus: false, refetchOnMount: false })
    const categoryQuery = api.category.getAll.useQuery({ supermarketId: supermarket?.id }, {
       enabled: !!supermarket?.id, refetchOnWindowFocus: false, refetchOnMount: false,
@@ -50,13 +55,19 @@ const Page: NextPage = () => {
       enabled: !!supermarket?.id, refetchOnWindowFocus: false, refetchOnMount: false,
    })
    
-   const columns = useMemo<ColumnDef<Product>[]>(() => {
+   const columns = useMemo<ColumnDef<IProduct>[]>(() => {
       return [
          {
             accessorKey: 'name',
             header: 'Name',
             cell: info => <Item data={info.row.original} categories={categoryQuery.data ?? []} suppliers={supplierQuery.data ?? []} />,
             size: 100,
+         },
+         {
+            accessorKey: 'cost',
+            header: 'Price',
+            cell: info => <span>{priceFormatter.toFormat(info.getValue() as number)}</span>,
+            size: 60,
          },
          {
             accessorKey: 'code',
@@ -71,15 +82,15 @@ const Page: NextPage = () => {
             size: 60,
          },
          {
-            accessorKey: 'categoryId',
+            accessorKey: 'categoryName',
             header: 'Category',
-            cell: info => <span>{_.find(categoryQuery.data, n => n.id === info.getValue())?.name ?? "Loading..."}</span>,
+            cell: info => <span>{info.getValue() as string}</span>,
             size: 60,
          },
          {
-            accessorKey: 'supplierId',
+            accessorKey: 'supplierName',
             header: 'Supplier',
-            cell: info => <span>{_.find(supplierQuery.data, n => n.id === info.getValue())?.name ?? "Loading..."}</span>,
+            cell: info => <span>{info.getValue() as string}</span>,
             size: 60,
          },
       ]
@@ -98,7 +109,7 @@ const Page: NextPage = () => {
                </>}
                />}
             >
-               <DataGrid<Product[]>
+               <DataGrid<IProduct[]>
                   columns={columns}
                   data={productQuery.data}
                   dataCount={productQuery.data?.length ?? 0}
@@ -126,7 +137,7 @@ const Page: NextPage = () => {
 
 interface ItemProps {
    children?: React.ReactNode
-   data: Product
+   data: IProduct
    categories: Category[]
    suppliers: Supplier[]
 }
@@ -213,7 +224,7 @@ export const AddForm: React.FC<AddFormProps> = (props) => {
 
 interface EditFormProps {
    children?: React.ReactNode
-   product: Product
+   product: IProduct
    categories: Category[]
    suppliers: Supplier[]
 }
@@ -224,6 +235,12 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
    const router = useRouter()
    
    const update = api.inventory.update.useMutation({
+      onSuccess: data => {
+         router.reload()
+      },
+   })
+   
+   const deleteObject = api.inventory.delete.useMutation({
       onSuccess: data => {
          router.reload()
       },
@@ -262,6 +279,8 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
                <Field.Price name="cost" label="Product cost" />
                <Field.Number name="quantityLeft" label="Quantity" />
                <Field.Submit role="update" />
+               
+               <DangerZone action="Delete this product" onDelete={() => deleteObject.mutate({ id: product.id })} />
             </TypesafeForm>
          </>
       } else {

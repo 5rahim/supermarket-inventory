@@ -1,10 +1,9 @@
-import { productSchema } from '@/pages/supermarket/inventory'
+import { IProduct, productSchema } from '@/pages/supermarket/inventory'
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
-import { Prisma, Product } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-import { uuid } from '@zag-js/utils'
+import { v4 } from 'uuid'
 import { z } from "zod"
-
 
 export const inventoryRouter = createTRPCRouter({
    getAllProducts: protectedProcedure
@@ -13,10 +12,14 @@ export const inventoryRouter = createTRPCRouter({
          if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
          
-         const products = await ctx.prisma.$queryRaw<Product[]>(
-            Prisma.sql`SELECT *
+         const products = await ctx.prisma.$queryRaw<IProduct[]>(
+            Prisma.sql`SELECT Product.*, Supplier.name supplierName, Category.name categoryName
                        FROM Product
-                       WHERE supermarketId = ${input.supermarketId}`,
+                                LEFT JOIN Supplier ON Supplier.id = Product.supplierId
+                                LEFT JOIN Category ON Category.id = Product.categoryId
+                       WHERE Product.supermarketId = ${input.supermarketId}
+                       GROUP BY Product.id
+            `,
          )
          
          return products
@@ -42,8 +45,8 @@ export const inventoryRouter = createTRPCRouter({
          return await ctx.prisma.$executeRaw(
             Prisma.sql`
                 INSERT INTO Product (id, code, name, description, unit, cost, quantityLeft, supplierId, categoryId, supermarketId)
-                VALUES (${uuid()}, ${input.code}, ${input.name}, ${input.description}, ${input.unit}, ${input.cost}, ${input.quantityLeft},
-                    ${input.supplierId}, ${input.categoryId}, ${input.supermarketId})
+                VALUES (${v4()}, ${input.code}, ${input.name}, ${input.description}, ${input.unit}, ${input.cost}, ${input.quantityLeft},
+                        ${input.supplierId}, ${input.categoryId}, ${input.supermarketId})
             `,
          )
       }),
@@ -57,14 +60,14 @@ export const inventoryRouter = createTRPCRouter({
          return await ctx.prisma.$executeRaw(
             Prisma.sql`
                 UPDATE Product
-                SET code          = ${input.code},
-                    name          = ${input.name},
-                    description   = ${input.description},
-                    unit          = ${input.unit},
-                    cost          = ${input.cost},
-                    quantityLeft  = ${input.quantityLeft},
-                    supplierId    = ${input.supplierId},
-                    categoryId    = ${input.categoryId}
+                SET code         = ${input.code},
+                    name         = ${input.name},
+                    description  = ${input.description},
+                    unit         = ${input.unit},
+                    cost         = ${input.cost},
+                    quantityLeft = ${input.quantityLeft},
+                    supplierId   = ${input.supplierId},
+                    categoryId   = ${input.categoryId}
                 WHERE id = ${input.id}
             `,
          )

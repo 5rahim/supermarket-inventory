@@ -1,11 +1,12 @@
 import { ProtectedPage } from '@/components/auth/ProtectedPage'
 import { Layout } from '@/components/layout/Layout'
 import { useDisclosure } from '@/hooks/use-disclosure'
+import { usePriceFormatter } from '@/hooks/use-price-formatter'
 import { useSupermarket } from '@/hooks/use-supermarket'
 import { getServerAuthSession } from '@/server/auth'
 import { InferType } from '@/types'
 import { api } from '@/utils/api'
-import { Category } from '@prisma/client'
+import { Product, Sale } from '@prisma/client'
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@ui/main/forms/button/Button'
@@ -22,35 +23,50 @@ import { useRouter } from 'next/router'
 import React, { memo, useMemo } from 'react'
 import { v4 } from 'uuid'
 
-export const categorySchema = createTypesafeFormSchema(({ z, presets }) => z.object({
+export const saleSchema = createTypesafeFormSchema(({ z, presets }) => z.object({
    id: z.string().nullish(),
-   name: z.string(),
+   quantity: z.number().min(0),
    supermarketId: z.string(),
+   productId: z.string(),
+   saleDate: z.date()
 }))
+
+export type ISale = Sale & { productName: string, total: number }
 
 const Page: NextPage = () => {
    const router = useRouter()
    
    const creationModal = useDisclosure(false)
    const { supermarket, isLoading, isEmpty } = useSupermarket()
-   const categoryQuery = api.category.getAll.useQuery({ supermarketId: supermarket?.id }, { enabled: !!supermarket })
+   const priceFormatter = usePriceFormatter()
+   const saleQuery = api.sale.getAll.useQuery({ supermarketId: supermarket?.id }, { enabled: !!supermarket, refetchOnWindowFocus: false, refetchOnMount: false })
+   const productQuery = api.inventory.getAllProducts.useQuery({ supermarketId: supermarket?.id }, { enabled: !!supermarket, refetchOnWindowFocus: false, refetchOnMount: false })
    
-   const columns = useMemo<ColumnDef<Category>[]>(() => {
+   const columns = useMemo<ColumnDef<ISale>[]>(() => {
       return [
          {
-            accessorKey: 'name',
-            header: 'Name',
-            cell: info => <Item data={info.row.original} />,
+            accessorKey: 'productName',
+            header: 'Product name',
+            cell: info => <Item data={info.row.original} products={productQuery.data ?? []} />,
             size: 60,
+            footer: props => props.column.id,
          },
          {
-            accessorKey: 'productCount',
-            header: () => <div>Number of products</div>,
+            accessorKey: 'quantity',
+            header: 'Quantity',
             cell: info => <span>{info.getValue() as number}</span>,
             size: 60,
+            footer: props => props.column.id,
+         },
+         {
+            accessorKey: 'total',
+            header: 'Total',
+            cell: info => <span>{priceFormatter.toFormat(info.getValue() as number)}</span>,
+            size: 60,
+            footer: props => props.column.id,
          },
       ]
-   }, [categoryQuery.data])
+   }, [saleQuery.data])
    
    if (isLoading) return <LoadingSpinner />
    if (isEmpty) router.push('/supermarket')
@@ -58,14 +74,14 @@ const Page: NextPage = () => {
       return (
          <ProtectedPage>
             <Layout header={<PageHeader
-               title="Categories" action={<>
-               <Button onClick={creationModal.open}>Add a category</Button>
+               title="Sales" action={<>
+               <Button onClick={creationModal.open}>Add a sale</Button>
             </>}
             />}>
-               <DataGrid<Category[]>
+               <DataGrid<ISale[]>
                   columns={columns}
-                  data={categoryQuery.data}
-                  dataCount={categoryQuery.data?.length ?? 0}
+                  data={saleQuery.data}
+                  dataCount={saleQuery.data?.length ?? 0}
                   isLoading={isLoading}
                   isFetching={false}
                   itemsPerPage={15}
@@ -74,10 +90,11 @@ const Page: NextPage = () => {
                      console.log(data)
                   }}
                />
+               {/*<DebugData data={saleQuery.data} />*/}
             </Layout>
             
-            <Modal title="Add a category" isOpen={creationModal.isOpen} onClose={creationModal.close} size="xl" actions={[{ action: 'close' }]}>
-               <AddForm supermarketId={supermarket.id} />
+            <Modal title="Add a sale" isOpen={creationModal.isOpen} onClose={creationModal.close} size="xl" actions={[{ action: 'close' }]}>
+               <AddForm supermarketId={supermarket.id} products={productQuery.data ?? []} />
             </Modal>
          
          </ProtectedPage>
@@ -89,12 +106,13 @@ const Page: NextPage = () => {
 
 interface ItemProps {
    children?: React.ReactNode
-   data: Category
+   data: ISale
+   products: Product[]
 }
 
 export const Item: React.FC<ItemProps> = memo((props) => {
    
-   const { children, data, ...rest } = props
+   const { children, data, products, ...rest } = props
    
    const modal = useDisclosure(false)
    
@@ -103,11 +121,11 @@ export const Item: React.FC<ItemProps> = memo((props) => {
          className="flex items-center gap-4 cursor-pointer"
          onClick={modal.open}
       >
-         <span className="text-lg font-semibold flex-none">{data.name as string}</span>
+         <span className="text-lg font-semibold flex-none">{data.productName as string}</span>
          <BiEditAlt className="text-lg" />
       </a>
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
-         <EditForm category={data} />
+         <EditForm sale={data} products={products} />
       </Modal>
    </>
    
@@ -116,24 +134,26 @@ export const Item: React.FC<ItemProps> = memo((props) => {
 interface AddFormProps {
    children?: React.ReactNode
    supermarketId: string
+   products: Product[]
 }
 
 export const AddForm: React.FC<AddFormProps> = (props) => {
    
-   const { children, supermarketId, ...rest } = props
+   const { children, supermarketId, products, ...rest } = props
    const router = useRouter()
    
-   const create = api.category.create.useMutation({
+   const create = api.sale.create.useMutation({
       onSuccess: data => {
          router.reload()
       },
    })
    
    return <>
-      <TypesafeForm<InferType<typeof categorySchema>>
-         schema={categorySchema}
+      <TypesafeForm<InferType<typeof saleSchema>>
+         schema={saleSchema}
          defaultValues={{
             id: v4(),
+            productId: products[0]?.id,
             supermarketId: supermarketId,
          }}
          onSubmit={data => {
@@ -142,7 +162,9 @@ export const AddForm: React.FC<AddFormProps> = (props) => {
       >
          <Field.Text name="id" hidden />
          <Field.Text name="supermarketId" hidden />
-         <Field.Text name="name" label="Category name" />
+         <Field.Select name="productId" label="Product" options={products.map(o => ({ value: o.id, label: o.name }))} />
+         <Field.Number name="quantity" label="Quantity" />
+         <Field.DatePicker name="saleDate" label="Date of purchase" />
          <Field.Submit role="create" />
       </TypesafeForm>
    </>
@@ -152,45 +174,48 @@ export const AddForm: React.FC<AddFormProps> = (props) => {
 
 interface EditFormProps {
    children?: React.ReactNode
-   category: Category
+   sale: ISale
+   products: Product[]
 }
 
 export const EditForm: React.FC<EditFormProps> = (props) => {
    
-   const { children, category, ...rest } = props
+   const { children, sale, products, ...rest } = props
    const router = useRouter()
    
-   const update = api.category.update.useMutation({
+   const update = api.sale.update.useMutation({
       onSuccess: data => {
          router.reload()
       },
    })
    
-   const deleteObject = api.category.delete.useMutation({
+   const deleteObject = api.sale.delete.useMutation({
       onSuccess: data => {
          router.reload()
       },
    })
    
    return <>
-      <TypesafeForm<InferType<typeof categorySchema>>
-         schema={categorySchema}
-         defaultValues={{
-            id: category.id,
-            name: category.name,
-            supermarketId: category.supermarketId,
-         }}
-         onSubmit={data => {
-            update.mutate(data)
-         }}
-      >
-         <Field.Text name="id" hidden />
-         <Field.Text name="supermarketId" hidden />
-         <Field.Text name="name" label="Category name" />
-         <Field.Submit role="update" />
-         
-         <DangerZone action="Delete this category" onDelete={() => deleteObject.mutate({ id: category.id })} />
-      </TypesafeForm>
+      {/*<TypesafeForm<InferType<typeof saleSchema>>*/}
+      {/*   schema={saleSchema}*/}
+      {/*   defaultValues={{*/}
+      {/*      id: sale.id,*/}
+      {/*      quantity: sale.quantity,*/}
+      {/*      productId: sale.productId,*/}
+      {/*      supermarketId: sale.supermarketId,*/}
+      {/*   }}*/}
+      {/*   onSubmit={data => {*/}
+      {/*      update.mutate(data)*/}
+      {/*   }}*/}
+      {/*>*/}
+      {/*   <Field.Text name="id" hidden />*/}
+      {/*   <Field.Text name="supermarketId" hidden />*/}
+      {/*   <Field.Select name="productId" label="Product" options={products.map(o => ({ value: o.id, label: o.name }))} />*/}
+      {/*   <Field.Number name="quantity" label="Quantity" />*/}
+      {/*   <Field.Submit role="update" />*/}
+      {/*   */}
+      {/*</TypesafeForm>*/}
+         <DangerZone action="Delete this sale" onDelete={() => deleteObject.mutate({ id: sale.id })} />
    </>
    
 }

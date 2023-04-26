@@ -56,15 +56,15 @@ const Page: NextPage = ({ supermarkets }: any) => {
             <ShowOnly when={!isEmpty}>
                <h2 className="text-center w-full text-lg text-gray-500">Your supermarket</h2>
                <h2 className="text-center w-full text-3xl font-medium mb-8">{supermarket?.name}</h2>
-               <dl className="text-center sm:mx-auto sm:grid sm:max-w-3xl sm:grid-cols-3 sm:gap-8">
+               <dl className="text-center sm:mx-auto sm:grid sm:max-w-3xl sm:grid-cols-2 sm:gap-8">
                   <div className="flex flex-col">
                      <dt className="order-2 mt-2 text-lg font-medium leading-6 text-brand-500">Products</dt>
                      <dd className="order-1 text-5xl font-bold tracking-tight">{statsQuery.data?.productCount ?? "0"}</dd>
                   </div>
-                  <div className="mt-10 flex flex-col sm:mt-0">
-                     <dt className="order-2 mt-2 text-lg font-medium leading-6 text-brand-500">Pending orders</dt>
-                     <dd className="order-1 text-5xl font-bold tracking-tight">{statsQuery.data?.orderCount ?? "0"}</dd>
-                  </div>
+                  {/*<div className="mt-10 flex flex-col sm:mt-0">*/}
+                  {/*   <dt className="order-2 mt-2 text-lg font-medium leading-6 text-brand-500">Pending orders</dt>*/}
+                  {/*   <dd className="order-1 text-5xl font-bold tracking-tight">{statsQuery.data?.orderCount ?? "0"}</dd>*/}
+                  {/*</div>*/}
                   <div className="mt-10 flex flex-col sm:mt-0">
                      <dt className="order-2 mt-2 text-lg font-medium leading-6 text-brand-500">Revenue</dt>
                      <dd className="order-1 text-5xl font-bold tracking-tight">${priceFormatter.toFormat(statsQuery.data?.revenue ?? 0)}</dd>

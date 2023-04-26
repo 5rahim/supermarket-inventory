@@ -70,7 +70,7 @@ model VerificationToken {
 model Supermarket {
     id String @id @default(cuid())
     name String
-    user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String
     suppliers Supplier[]
     categories Category[]
@@ -83,7 +83,7 @@ model Supplier {
     id String @id @default(cuid())
     name String
     email String
-    supermarket Supermarket @relation(fields: [supermarketId], references: [id])
+    supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
     orders SupplierOrder[]
     products Product[]
@@ -93,7 +93,7 @@ model Supplier {
 model Category {
     id String @id @default(cuid())
     name String
-    supermarket Supermarket @relation(fields: [supermarketId], references: [id])
+    supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
     products Product[]
     createdAt DateTime @default(now())
@@ -107,11 +107,11 @@ model Product {
     unit String
     cost Int
     quantityLeft Int
-    supplier Supplier @relation(fields: [supplierId], references: [id])
+    supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
     supplierId String
-    category Category @relation(fields: [categoryId], references: [id])
-    categoryId String
-    supermarket Supermarket @relation(fields: [supermarketId], references: [id])
+    category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    categoryId String?
+    supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
     sales Sale[]
     orders SupplierOrder[]
@@ -122,9 +122,9 @@ model Product {
 model SupplierOrder {
     id String @id @default(cuid())
     deliveryDate DateTime
-    product Product @relation(fields: [productId], references: [id])
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     productId String
-    supplier Supplier @relation(fields: [supplierId], references: [id])
+    supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
     supplierId String
     quantity Int
     status String
@@ -133,9 +133,9 @@ model SupplierOrder {
 
 model Sale {
     id String @id @default(cuid())
-    product Product @relation(fields: [productId], references: [id])
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     productId String
-    supermarket Supermarket @relation(fields: [supermarketId], references: [id])
+    supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
     quantity Int
     saleDate DateTime @default(now())

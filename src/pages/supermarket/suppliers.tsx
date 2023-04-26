@@ -14,6 +14,7 @@ import { Field } from '@ui/main/forms/typesafe-form/Field'
 import { TypesafeForm } from '@ui/main/forms/typesafe-form/TypesafeForm'
 import { PageHeader } from '@ui/main/layout/page-header/PageHeader'
 import { Modal } from '@ui/main/overlay/modal/Modal'
+import { DangerZone } from '@ui/shared/danger-zone/DangerZone'
 import { DataGrid } from '@ui/shared/data-grid/DataGrid'
 import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
 import { GetServerSideProps, NextPage } from 'next'
@@ -170,6 +171,12 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
       },
    })
    
+   const deleteObject = api.supplier.delete.useMutation({
+      onSuccess: data => {
+         router.reload()
+      },
+   })
+   
    return <>
       <TypesafeForm<InferType<typeof supplierSchema>>
          schema={supplierSchema}
@@ -188,6 +195,8 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
          <Field.Text name="name" label="Supplier name" />
          <Field.Text name="email" label="Supplier email" />
          <Field.Submit role="update" />
+         
+         <DangerZone action="Delete this supplier" onDelete={() => deleteObject.mutate({ id: supplier.id })} />
       </TypesafeForm>
    </>
    

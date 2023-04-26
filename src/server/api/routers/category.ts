@@ -6,7 +6,6 @@ import { TRPCError } from '@trpc/server'
 import { v4 } from 'uuid'
 import { z } from "zod"
 
-
 export const categoryRouter = createTRPCRouter({
    getAll: protectedProcedure
       .input(z.object({ supermarketId: z.string().nullish() }))
@@ -15,11 +14,12 @@ export const categoryRouter = createTRPCRouter({
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
          
          const res = await ctx.prisma.$queryRaw<(Category & { productCount: number })[]>(
-            Prisma.sql`SELECT Category.*, COUNT(Product.id) productCount
-                       FROM Category
-                                LEFT JOIN Product ON Product.categoryId = Category.id
-                       WHERE Category.supermarketId = ${input.supermarketId}
-                       GROUP BY Category.id
+            Prisma.sql`
+                SELECT Category.*, COUNT(Product.id) productCount
+                FROM Category
+                         LEFT JOIN Product ON Product.categoryId = Category.id
+                WHERE Category.supermarketId = ${input.supermarketId}
+                GROUP BY Category.id
             `,
          )
          

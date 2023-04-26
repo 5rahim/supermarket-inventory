@@ -31,7 +31,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
       { name: 'Inventory', href: '/supermarket/inventory', current: router.pathname === '/supermarket/inventory' },
       { name: 'Categories', href: '/supermarket/categories', current: router.pathname === '/supermarket/categories' },
       { name: 'Suppliers', href: '/supermarket/suppliers', current: router.pathname === '/supermarket/suppliers' },
-      { name: 'Supplier orders', href: '/supermarket/supplier-orders', current: router.pathname === '/supermarket/supplier-orders' },
+      // { name: 'Supplier orders', href: '/supermarket/supplier-orders', current: router.pathname === '/supermarket/supplier-orders' },
+      { name: 'Sales', href: '/supermarket/sales', current: router.pathname === '/supermarket/sales' },
    ]
    const userNavigation = [
       { name: 'Sign out', href: '/api/auth/signout' },
