@@ -1,6 +1,10 @@
 # Supermarket Inventory Management
 
 - Management Inventory
-  - CRUD Items
+  - Manage Items
+  - Keep track of suppliers
   - Keep track of sales
-- Customer management
+
+- Potential features
+  - Keep track of low stock
+  - Keep track of supplier orders
