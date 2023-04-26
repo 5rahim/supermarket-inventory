@@ -1,6 +1,6 @@
 # Supermarket Inventory Management
 
-- Management Inventory
+- Inventory Management
   - Manage Items
   - Keep track of suppliers
   - Keep track of sales
