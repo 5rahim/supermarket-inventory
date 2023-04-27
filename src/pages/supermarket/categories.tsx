@@ -7,6 +7,7 @@ import { InferType } from '@/types'
 import { api } from '@/utils/api'
 import { Category } from '@prisma/client'
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt'
+import { useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@ui/main/forms/button/Button'
 import { createTypesafeFormSchema } from '@ui/main/forms/typesafe-form/CreateTypesafeFormSchema'
@@ -62,7 +63,8 @@ const Page: NextPage = () => {
                <Button onClick={creationModal.open}>Add a category</Button>
             </>}
             />}>
-               <DataGrid<Category[]>
+               {categoryQuery.isLoading && <LoadingSpinner />}
+               {!categoryQuery.isLoading && <DataGrid<Category[]>
                   columns={columns}
                   data={categoryQuery.data}
                   dataCount={categoryQuery.data?.length ?? 0}
@@ -73,7 +75,7 @@ const Page: NextPage = () => {
                   onItemSelected={data => {
                      console.log(data)
                   }}
-               />
+               />}
             </Layout>
             
             <Modal title="Add a category" isOpen={creationModal.isOpen} onClose={creationModal.close} size="xl" actions={[{ action: 'close' }]}>
@@ -159,16 +161,19 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
    
    const { children, category, ...rest } = props
    const router = useRouter()
+   const qc = useQueryClient()
    
    const update = api.category.update.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    
    const deleteObject = api.category.delete.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    

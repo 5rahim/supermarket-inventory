@@ -38,6 +38,22 @@ export const inventoryRouter = createTRPCRouter({
          )
          
       }),
+   getLowStockItem: protectedProcedure
+      .input(z.object({ supermarketId: z.string(), threshold: z.number() }))
+      .query(async ({ ctx, input }) => {
+         if (!input.supermarketId)
+            new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
+         
+         return await ctx.prisma.$queryRaw<{ itemName: string, itemQuantity: string, supplierName: string, supplierEmail: string }[]>(
+            Prisma.sql`SELECT p.name itemName, p.quantityLeft itemQuantity, s.name supplierName, s.email supplierEmail
+                       FROM Product p
+                                LEFT JOIN Supplier s ON s.id = p.supplierId
+                       WHERE p.supermarketId = ${input.supermarketId}
+                         AND p.quantityLeft < ${input.threshold}
+            `,
+         )
+         
+      }),
    create: protectedProcedure
       .input(productSchema)
       .mutation(async ({ ctx, input }) => {

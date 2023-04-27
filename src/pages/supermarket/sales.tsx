@@ -8,6 +8,7 @@ import { InferType } from '@/types'
 import { api } from '@/utils/api'
 import { Product, Sale } from '@prisma/client'
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt'
+import { useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@ui/main/forms/button/Button'
 import { createTypesafeFormSchema } from '@ui/main/forms/typesafe-form/CreateTypesafeFormSchema'
@@ -78,7 +79,8 @@ const Page: NextPage = () => {
                <Button onClick={creationModal.open}>Add a sale</Button>
             </>}
             />}>
-               <DataGrid<ISale[]>
+               {saleQuery.isLoading && <LoadingSpinner />}
+               {!saleQuery.isLoading && <DataGrid<ISale[]>
                   columns={columns}
                   data={saleQuery.data}
                   dataCount={saleQuery.data?.length ?? 0}
@@ -89,7 +91,7 @@ const Page: NextPage = () => {
                   onItemSelected={data => {
                      console.log(data)
                   }}
-               />
+               />}
                {/*<DebugData data={saleQuery.data} />*/}
             </Layout>
             
@@ -182,16 +184,19 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
    
    const { children, sale, products, ...rest } = props
    const router = useRouter()
+   const qc = useQueryClient()
    
    const update = api.sale.update.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    
    const deleteObject = api.sale.delete.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    

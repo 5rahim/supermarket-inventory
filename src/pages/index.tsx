@@ -8,16 +8,20 @@ import { GetServerSideProps, type NextPage } from "next"
 import { signIn, signOut, useSession } from "next-auth/react"
 import Head from "next/head"
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const Home: NextPage = () => {
    
    const router = useRouter()
-   const { data: sessionData } = useSession()
+   const { data: sessionData, status } = useSession()
    
-   if(sessionData?.user) {
-      router.push('/supermarket')
-      return <LoadingSpinner />
-   }
+   useEffect(() => {
+      if(sessionData?.user) {
+         router.push('/supermarket')
+      }
+   }, [])
+   
+   if(status === 'loading') return <LoadingSpinner />
    
    return (
       <>

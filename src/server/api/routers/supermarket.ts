@@ -41,20 +41,33 @@ export const supermarketRouter = createTRPCRouter({
          
          const res2 = await ctx.prisma.$queryRaw<any>(
             Prisma.sql`
-                SELECT COUNT(P.id) productCount, SUM(SL.quantity * P.cost) revenue
+                SELECT COUNT(DISTINCT p.id) productCount, SUM(p.cost * s.quantity) revenue
+                FROM Sale s
+                         LEFT JOIN Product p ON s.productId = p.id
+                WHERE s.supermarketId = ${input.supermarketId}
+            `,
+         )
+         
+         const res3 = await ctx.prisma.$queryRaw<any>(
+            Prisma.sql`
+                SELECT COUNT(DISTINCT SL.id) saleCount, COUNT(DISTINCT SP.id) supplierCount, COUNT(DISTINCT C.id) categoryCount
                 FROM Supermarket S
-                LEFT JOIN Product P ON P.supermarketId = S.id
-                LEFT JOIN Sale SL ON SL.supermarketId = S.id
+                JOIN Sale SL ON SL.supermarketId = S.id
+                JOIN Supplier SP ON SP.supermarketId = S.id
+                JOIN Category C ON C.supermarketId = S.id
                 WHERE S.id = ${input.supermarketId}
             `,
          )
          
          console.log(res2)
          
-         const status: { productCount: number, orderCount: number, revenue: number } = {
+         const status: { productCount: number, orderCount: number, supplierCount: number, categoryCount: number, saleCount: number, revenue: number } = {
             productCount: bigIntToNumber(res2[0].productCount),
-            orderCount: bigIntToNumber(res2[0].orderCount) ?? 0,
             revenue: bigIntToNumber(res2[0].revenue) ?? 0,
+            orderCount: 0,
+            saleCount: bigIntToNumber(res3[0].saleCount) ?? 0,
+            supplierCount: bigIntToNumber(res3[0].supplierCount) ?? 0,
+            categoryCount: bigIntToNumber(res3[0].categoryCount) ?? 0,
          }
          
          return status

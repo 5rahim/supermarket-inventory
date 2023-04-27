@@ -8,6 +8,7 @@ import { InferType } from '@/types'
 import { api } from '@/utils/api'
 import { Category, Product, Supplier } from '@prisma/client'
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt'
+import { useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@ui/main/forms/button/Button'
 import { createTypesafeFormSchema } from '@ui/main/forms/typesafe-form/CreateTypesafeFormSchema'
@@ -18,6 +19,7 @@ import { Modal } from '@ui/main/overlay/modal/Modal'
 import { DangerZone } from '@ui/shared/danger-zone/DangerZone'
 import { DataGrid } from '@ui/shared/data-grid/DataGrid'
 import { LoadingSpinner } from '@ui/shared/loading-spinner/LoadingSpinner'
+import ShowOnly from '@ui/shared/show-only/ShowOnly'
 import { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
@@ -109,18 +111,21 @@ const Page: NextPage = () => {
                </>}
                />}
             >
-               <DataGrid<IProduct[]>
-                  columns={columns}
-                  data={productQuery.data}
-                  dataCount={productQuery.data?.length ?? 0}
-                  isLoading={isLoading}
-                  isFetching={false}
-                  itemsPerPage={15}
-                  enableRowSelection={false}
-                  onItemSelected={data => {
-                     console.log(data)
-                  }}
-               />
+               {productQuery.isLoading && <LoadingSpinner />}
+               <ShowOnly when={!productQuery.isLoading}>
+                  <DataGrid<IProduct[]>
+                     columns={columns}
+                     data={productQuery.data}
+                     dataCount={productQuery.data?.length ?? 0}
+                     isLoading={isLoading}
+                     isFetching={false}
+                     itemsPerPage={15}
+                     enableRowSelection={false}
+                     onItemSelected={data => {
+                        console.log(data)
+                     }}
+                  />
+               </ShowOnly>
                {/*<DebugData data={productQuery.data} />*/}
             </Layout>
             
@@ -233,16 +238,19 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
    
    const { children, product, categories, suppliers, ...rest } = props
    const router = useRouter()
+   const qc = useQueryClient()
    
    const update = api.inventory.update.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    
    const deleteObject = api.inventory.delete.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    

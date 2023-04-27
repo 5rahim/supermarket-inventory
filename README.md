@@ -1,10 +1,7 @@
 # Supermarket Inventory Management
 
 - Inventory Management
-  - Manage Items
+  - Manage products
+  - Keep track of products in low stock 
   - Keep track of suppliers
   - Keep track of sales
-
-- Potential features
-  - Keep track of low stock
-  - Keep track of supplier orders

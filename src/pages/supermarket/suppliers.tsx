@@ -7,6 +7,7 @@ import { InferType } from '@/types'
 import { api } from '@/utils/api'
 import { Supplier } from '@prisma/client'
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt'
+import { useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@ui/main/forms/button/Button'
 import { createTypesafeFormSchema } from '@ui/main/forms/typesafe-form/CreateTypesafeFormSchema'
@@ -65,7 +66,8 @@ const Page: NextPage = () => {
                <Button onClick={creationModal.open}>Add a supplier</Button>
             </>}
             />}>
-               <DataGrid<Supplier[]>
+               {supplierQuery.isLoading && <LoadingSpinner />}
+               {!supplierQuery.isLoading && <DataGrid<Supplier[]>
                   columns={columns}
                   data={supplierQuery.data}
                   dataCount={supplierQuery.data?.length ?? 0}
@@ -76,7 +78,7 @@ const Page: NextPage = () => {
                   onItemSelected={data => {
                      console.log(data)
                   }}
-               />
+               />}
                {/*<DebugData data={supplierQuery.data} />*/}
             </Layout>
             
@@ -164,16 +166,19 @@ export const EditForm: React.FC<EditFormProps> = (props) => {
    
    const { children, supplier, ...rest } = props
    const router = useRouter()
+   const qc = useQueryClient()
    
    const update = api.supplier.update.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    
    const deleteObject = api.supplier.delete.useMutation({
       onSuccess: data => {
-         router.reload()
+         // router.reload()
+         qc.refetchQueries()
       },
    })
    
