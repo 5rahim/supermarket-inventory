@@ -41,7 +41,7 @@ export const supermarketRouter = createTRPCRouter({
          
          const res2 = await ctx.prisma.$queryRaw<any>(
             Prisma.sql`
-                SELECT COUNT(DISTINCT p.id) productCount, SUM(p.cost * s.quantity) revenue
+                SELECT COUNT(p.id) productCount, SUM(p.cost * s.quantity) revenue
                 FROM Sale s
                          LEFT JOIN Product p ON s.productId = p.id
                 WHERE s.supermarketId = ${input.supermarketId}

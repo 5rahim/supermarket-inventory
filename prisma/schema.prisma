@@ -15,12 +15,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -85,7 +79,6 @@ model Supplier {
     email String
     supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
-    orders SupplierOrder[]
     products Product[]
     createdAt DateTime @default(now())
 }
@@ -114,20 +107,6 @@ model Product {
     supermarket Supermarket @relation(fields: [supermarketId], references: [id], onDelete: Cascade)
     supermarketId String
     sales Sale[]
-    orders SupplierOrder[]
-    createdAt DateTime @default(now())
-}
-
-
-model SupplierOrder {
-    id String @id @default(cuid())
-    deliveryDate DateTime
-    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    productId String
-    supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
-    supplierId String
-    quantity Int
-    status String
     createdAt DateTime @default(now())
 }
 

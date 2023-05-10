@@ -1,4 +1,5 @@
 import { IProduct, productSchema } from '@/pages/supermarket/inventory'
+import { bigIntToNumber } from '@/server/api/routers/supermarket'
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
@@ -31,11 +32,17 @@ export const inventoryRouter = createTRPCRouter({
          if (!input.supermarketId)
             new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Supermarket id is empty' })
          
-         return await ctx.prisma.$queryRaw<number>(
-            Prisma.sql`SELECT COUNT(id)
+         const res = await ctx.prisma.$queryRaw<any>(
+            Prisma.sql`SELECT COUNT(id) productCount
                        FROM Product
                        WHERE supermarketId = ${input.supermarketId}`,
          )
+         
+         const data: { productCount: number } = {
+            productCount: bigIntToNumber(res[0].productCount ?? 0),
+         }
+         
+         return data
          
       }),
    getLowStockItem: protectedProcedure

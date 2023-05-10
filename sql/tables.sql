@@ -68,18 +68,3 @@ CREATE TABLE `Supplier`
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_unicode_ci;
-
-CREATE TABLE `SupplierOrder`
-(
-    `id`           varchar(191) NOT NULL,
-    `deliveryDate` datetime(3)  NOT NULL,
-    `productId`    varchar(191) NOT NULL,
-    `supplierId`   varchar(191) NOT NULL,
-    `quantity`     int          NOT NULL,
-    `status`       varchar(191) NOT NULL,
-    `createdAt`    datetime(3)  NOT NULL DEFAULT current_timestamp(3),
-    FOREIGN KEY (supplierId) REFERENCES Supplier (id),
-    PRIMARY KEY (`id`)
-) ENGINE InnoDB,
-  CHARSET utf8mb4,
-  COLLATE utf8mb4_unicode_ci;
